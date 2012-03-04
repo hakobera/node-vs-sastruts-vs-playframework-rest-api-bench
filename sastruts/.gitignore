@@ -1,0 +1,7 @@
+target
+repo
+lib
+src/main/webapp/WEB-INF/classes
+.settings
+.classpath
+.project

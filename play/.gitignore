@@ -1,0 +1,9 @@
+tmp
+logs
+lib
+precompile
+eclipse
+.settings
+.classpath
+.project
+server.pid

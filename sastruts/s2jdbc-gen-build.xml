@@ -1,0 +1,265 @@
+<project name="apibench-s2jdbc-gen" default="gen-ddl" basedir=".">
+
+  <property name="classpathdir" value="src/main/webapp/WEB-INF/classes"/>
+  <property name="rootpackagename" value="com.github.hakobera.apibench"/>
+  <property name="entitypackagename" value="entity"/>
+  <property name="entityfilepattern" value="com/github/hakobera/apibench/entity/**/*.java"/>
+  <property name="javafiledestdir" value="src/main/java"/>
+  <property name="testjavafiledestdir" value="src/test/java"/>
+  <property name="javafileencoding" value="UTF-8"/>
+  <property name="version" value="latest"/>
+  <property name="sqlfilepattern" value="META-INF/sql/**/*.sql"/>
+  <property name="applyenvtoversion" value="false"/>
+  <property name="uses2junit4" value="false"/>
+  <property name="env" value="ut"/>
+  <property name="jdbcmanagername" value="jdbcManager"/>
+  <condition property="vmarg.encoding" value="-Dfile.encoding=UTF-8" else="">
+    <isset property="eclipse.pdebuild.home"/>
+  </condition>
+
+  <path id="classpath">
+    <pathelement location="${classpathdir}"/>
+    <fileset dir="lib">
+      <exclude name="lib/sources/**"/>
+    </fileset>
+  </path>
+
+  <taskdef resource="s2jdbc-gen-task.properties" classpathref="classpath"/>
+
+  <target name="gen-entity">
+    <gen-entity
+      rootpackagename="${rootpackagename}"
+      entitypackagename="${entitypackagename}"
+      javafiledestdir="${javafiledestdir}"
+      javafileencoding="${javafileencoding}"
+      env="${env}"
+      jdbcmanagername="${jdbcmanagername}"
+      classpathref="classpath">
+        <jvmarg value="${vmarg.encoding}"/>
+    </gen-entity>
+    <javac
+      srcdir="${javafiledestdir}"
+      destdir="${classpathdir}"
+      encoding="${javafileencoding}"
+      fork="true"
+      debug="on"
+      classpathref="classpath">
+      <include name="${entityfilepattern}"/>
+    </javac>
+    <gen-names
+      classpathdir="${classpathdir}"
+      rootpackagename="${rootpackagename}"
+      entitypackagename="${entitypackagename}"
+      javafiledestdir="${javafiledestdir}"
+      javafileencoding="${javafileencoding}"
+      env="${env}"
+      jdbcmanagername="${jdbcmanagername}"
+      classpathref="classpath">
+        <jvmarg value="${vmarg.encoding}"/>
+    </gen-names>
+    <gen-sqlfileconstants
+      classpathDir="${classpathdir}"
+      rootpackagename="${rootpackagename}"
+      javafiledestdir="${javafiledestdir}"
+      javafileencoding="${javafileencoding}"
+      env="${env}"
+      jdbcmanagername="${jdbcmanagername}"
+      classpathref="classpath">
+        <sqlfileset dir="${classpathdir}">
+          <include name="${sqlfilepattern}" />
+        </sqlfileset>
+        <jvmarg value="${vmarg.encoding}"/>
+    </gen-sqlfileconstants>
+    <gen-service
+      classpathdir="${classpathdir}"
+      rootpackagename="${rootpackagename}"
+      entitypackagename="${entitypackagename}"
+      javafiledestdir="${javafiledestdir}"
+      javafileencoding="${javafileencoding}"
+      env="${env}"
+      jdbcmanagername="${jdbcmanagername}"
+      classpathref="classpath">
+        <jvmarg value="${vmarg.encoding}"/>
+    </gen-service>
+    <gen-entitytest
+      classpathdir="${classpathdir}"
+      rootpackagename="${rootpackagename}"
+      entitypackagename="${entitypackagename}"
+      javafiledestdir="${testjavafiledestdir}"
+      javafileencoding="${javafileencoding}"
+      uses2junit4="${uses2junit4}"
+      env="${env}"
+      jdbcmanagername="${jdbcmanagername}"
+      classpathref="classpath">
+        <jvmarg value="${vmarg.encoding}"/>
+    </gen-entitytest>
+    <gen-servicetest
+      classpathdir="${classpathdir}"
+      rootpackagename="${rootpackagename}"
+      javafiledestdir="${testjavafiledestdir}"
+      javafileencoding="${javafileencoding}"
+      uses2junit4="${uses2junit4}"
+      env="${env}"
+      jdbcmanagername="${jdbcmanagername}"
+      classpathref="classpath">
+        <jvmarg value="${vmarg.encoding}"/>
+    </gen-servicetest>
+    <gen-sqlfiletest
+      classpathdir="${classpathdir}"
+      rootpackagename="${rootpackagename}"
+      subpackagename="${entitypackagename}"
+      javafiledestdir="${testjavafiledestdir}"
+      javafileencoding="${javafileencoding}"
+      uses2junit4="${uses2junit4}"
+      env="${env}"
+      jdbcmanagername="${jdbcmanagername}"
+      classpathref="classpath">
+        <sqlfileset dir="${classpathdir}">
+          <include name="${sqlfilepattern}" />
+        </sqlfileset>
+        <jvmarg value="${vmarg.encoding}"/>
+    </gen-sqlfiletest>
+    <!-- セキュリティの設定によっては以下の refresh タスクに時間がかかる場合があります．
+      その場合は refresh タスクを削除してください．-->
+    <refresh projectName="apibench"/>
+  </target>
+
+  <target name="gen-ddl">
+    <gen-ddl
+      classpathdir="${classpathdir}"
+      rootpackagename="${rootpackagename}"
+      entitypackagename="${entitypackagename}"
+      env="${env}"
+      jdbcmanagername="${jdbcmanagername}"
+      classpathref="classpath">
+        <jvmarg value="${vmarg.encoding}"/>
+    </gen-ddl>
+    <gen-names
+      classpathdir="${classpathdir}"
+      rootpackagename="${rootpackagename}"
+      entitypackagename="${entitypackagename}"
+      javafiledestdir="${javafiledestdir}"
+      javafileencoding="${javafileencoding}"
+      env="${env}"
+      jdbcmanagername="${jdbcmanagername}"
+      classpathref="classpath">
+        <jvmarg value="${vmarg.encoding}"/>
+    </gen-names>
+    <gen-sqlfileconstants
+      classpathDir="${classpathdir}"
+      rootpackagename="${rootpackagename}"
+      javafiledestdir="${javafiledestdir}"
+      javafileencoding="${javafileencoding}"
+      env="${env}"
+      jdbcmanagername="${jdbcmanagername}"
+      classpathref="classpath">
+        <sqlfileset dir="${classpathdir}">
+          <include name="${sqlfilepattern}" />
+        </sqlfileset>
+        <jvmarg value="${vmarg.encoding}"/>
+    </gen-sqlfileconstants>
+    <gen-service
+      classpathdir="${classpathdir}"
+      rootpackagename="${rootpackagename}"
+      entitypackagename="${entitypackagename}"
+      javafiledestdir="${javafiledestdir}"
+      javafileencoding="${javafileencoding}"
+      env="${env}"
+      jdbcmanagername="${jdbcmanagername}"
+      classpathref="classpath">
+        <jvmarg value="${vmarg.encoding}"/>
+    </gen-service>
+    <gen-entitytest
+      classpathdir="${classpathdir}"
+      rootpackagename="${rootpackagename}"
+      entitypackagename="${entitypackagename}"
+      javafiledestdir="${testjavafiledestdir}"
+      javafileencoding="${javafileencoding}"
+      uses2junit4="${uses2junit4}"
+      env="${env}"
+      jdbcmanagername="${jdbcmanagername}"
+      classpathref="classpath">
+        <jvmarg value="${vmarg.encoding}"/>
+    </gen-entitytest>
+    <gen-servicetest
+      classpathdir="${classpathdir}"
+      rootpackagename="${rootpackagename}"
+      javafiledestdir="${testjavafiledestdir}"
+      javafileencoding="${javafileencoding}"
+      uses2junit4="${uses2junit4}"
+      env="${env}"
+      jdbcmanagername="${jdbcmanagername}"
+      classpathref="classpath">
+        <jvmarg value="${vmarg.encoding}"/>
+    </gen-servicetest>
+    <gen-sqlfiletest
+      classpathdir="${classpathdir}"
+      rootpackagename="${rootpackagename}"
+      subpackagename="${entitypackagename}"
+      javafiledestdir="${testjavafiledestdir}"
+      javafileencoding="${javafileencoding}"
+      uses2junit4="${uses2junit4}"
+      env="${env}"
+      jdbcmanagername="${jdbcmanagername}"
+      classpathref="classpath">
+        <sqlfileset dir="${classpathdir}">
+          <include name="${sqlfilepattern}" />
+        </sqlfileset>
+        <jvmarg value="${vmarg.encoding}"/>
+    </gen-sqlfiletest>
+    <!-- セキュリティの設定によっては以下の refresh タスクに時間がかかる場合があります．
+      その場合は refresh タスクを削除してください．-->
+    <refresh projectName="apibench"/>
+  </target>
+
+  <target name="migrate">
+    <migrate
+      classpathdir="${classpathdir}"
+      rootpackagename="${rootpackagename}"
+      entitypackagename="${entitypackagename}"
+      applyenvtoversion="${applyenvtoversion}"
+      version="${version}"
+      env="${env}"
+      jdbcmanagername="${jdbcmanagername}"
+      classpathref="classpath">
+        <jvmarg value="${vmarg.encoding}"/>
+    </migrate>
+    <!-- セキュリティの設定によっては以下の refresh タスクに時間がかかる場合があります．
+      その場合は refresh タスクを削除してください．-->
+    <refresh projectName="apibench"/>
+  </target>
+
+  <target name="rollback">
+    <migrate
+      classpathdir="${classpathdir}"
+      rootpackagename="${rootpackagename}"
+      entitypackagename="${entitypackagename}"
+      applyenvtoversion="${applyenvtoversion}"
+      version="previous"
+      env="${env}"
+      jdbcmanagername="${jdbcmanagername}"
+      classpathref="classpath">
+        <jvmarg value="${vmarg.encoding}"/>
+    </migrate>
+    <!-- セキュリティの設定によっては以下の refresh タスクに時間がかかる場合があります．
+      その場合は refresh タスクを削除してください．-->
+    <refresh projectName="apibench"/>
+  </target>
+
+  <target name="dump">
+    <dump-data
+      classpathdir="${classpathdir}"
+      rootpackagename="${rootpackagename}"
+      applyenvtoversion="${applyenvtoversion}"
+      entitypackagename="${entitypackagename}"
+      env="${env}"
+      jdbcmanagername="${jdbcmanagername}"
+      classpathref="classpath">
+        <jvmarg value="${vmarg.encoding}"/>
+    </dump-data>
+    <!-- セキュリティの設定によっては以下の refresh タスクに時間がかかる場合があります．
+      その場合は refresh タスクを削除してください．-->
+    <refresh projectName="apibench"/>
+  </target>
+
+</project>
