@@ -1,4 +1,4 @@
-var pg = require('pg').native;
+var pg = require('pg');
 
 var dbUrl = "tcp://bunny:tiger@localhost/api_bench";
 
