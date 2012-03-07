@@ -31,7 +31,7 @@ app.resource('orders', require('./resources/Order'));
 if (cluster.isMaster) {
   var workers = [];
 
-	var numChildren = os.cpus().length * 2;
+  var numChildren = parseInt(process.argv[2]);
     
   for (var i = 0; i < numChildren; i++) {
     workers.push(cluster.fork());
