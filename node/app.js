@@ -1,9 +1,10 @@
-
 /**
  * Module dependencies.
  */
 
-var express = require('express')
+var cluster = require('cluster')
+  , express = require('express')
+  , os = require('os')
   , Resource = require('express-resource');
 
 var app = module.exports = express.createServer();
@@ -27,6 +28,25 @@ app.configure('production', function(){
 
 // Routes
 app.resource('orders', require('./resources/Order'));
+if (cluster.isMaster) {
+  var workers = [];
 
-app.listen(process.env.PORT || 3000);
-console.log("Express server listening on port %d in %s mode", app.address().port, app.settings.env);
+	var numChildren = os.cpus().length * 2;
+    
+  for (var i = 0; i < numChildren; i++) {
+    workers.push(cluster.fork());
+  }
+  
+  cluster.on('death', function (worker) {
+    console.warn('Worker ' + worker.pid + ' died');
+
+    workers = workers.filter(function (w) {
+      return worker !== w;
+    });
+
+    workers.push(cluster.fork());
+  });
+} else {
+	app.listen(3000);
+	console.log("Express server listening on port %d in %s mode", process.env.PORT, app.settings.env);
+}
